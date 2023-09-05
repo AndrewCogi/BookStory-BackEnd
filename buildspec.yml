@@ -17,7 +17,7 @@ phases:   # 빌드 단계
       - mvn package
 artifacts:
   files:
-    - target/demo-0.0.1-SNAPSHOT.jar  # 업로드 할 파일들
+    - target/BookStory-BackEnd-0.0.1-SNAPSHOT.jar  # 업로드 할 파일들 (파일명 맞게 수정하기)
   discard-paths: yes # 파일명 기준으로만 업로드
 cache:
   paths:
