@@ -24,7 +24,7 @@ public class BookStoryBackEndApplication {
 
 	@GetMapping("/hello")
 	public String HelloWorld(){
-		return "Hello World";
+		return "Hello World - Orca0917";
 	}
 
 	@GetMapping("/")
