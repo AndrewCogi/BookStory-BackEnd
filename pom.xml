@@ -39,6 +39,25 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Spring Boot Starter for Spring Data JPA -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<!-- Spring Boot Starter for JDBC -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+
+		<!-- MySQL Connector Java for JDBC -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version> <!--MySQL version-->
+		</dependency>
+
 		<!-- AWS SDK 의존성 -->
 		<dependency>
 			<groupId>com.amazonaws</groupId>
@@ -50,6 +69,7 @@
 			<artifactId>aws-java-sdk-cognitoidp</artifactId>
 			<version>1.12.471</version>
 		</dependency>
+		<!-- AWS -->
 	</dependencies>
 
 	<build>
