@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name="bus")
+@Entity(name="book")
 public class Book {
     @Id
     private Long id;
