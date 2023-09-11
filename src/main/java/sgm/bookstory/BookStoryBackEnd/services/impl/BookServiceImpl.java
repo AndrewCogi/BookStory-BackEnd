@@ -22,6 +22,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public Book removeBook(Book book){
+        if(!bookRepository.existsById(book.getBookId())) throw new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not exists!");
+        bookRepository.deleteById(book.getBookId());
+        return book;
+    }
+
+    @Override
     public List<Book> getAllBook() {
         return bookRepository.findAll();
     }

@@ -1,8 +1,6 @@
 package sgm.bookstory.BookStoryBackEnd.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +15,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name="book")
+@Entity
+@Table(name="book")
 public class Book {
     @Id
     private Long bookId;
@@ -34,18 +33,20 @@ public class Book {
     @Column(nullable = false)
     private List<CategoryType> categoryType;
     @Column(nullable = false)
-    Long playTime;
+    private String playTime;
     @Column(nullable = false)
-    Long favorite;
+    private Long favorite;
     @Column(nullable = false)
-    Long playCount;
+    private Long playCount;
     @Column(nullable = false)
-    Double rate;
+    private Double rate;
     @Column(nullable = false)
-    String imagePath;
+    private String imagePath;
     @Column(nullable = false)
-    String description;
+    private String description;
     @Column
     @CreationTimestamp
-    Timestamp updateTime;
+    private Timestamp updateTime;
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
+    private List<View> views;
 }

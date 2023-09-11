@@ -31,6 +31,16 @@ public class BookController {
         return new ResponseModel<>(HttpStatus.OK.value(), "Book Saved", savedBook);
     }
 
+    @PostMapping("/remove")
+    // 책 제거하기
+    public ResponseModel<Book> removeBook(@RequestBody Book book, @RequestParam String password){
+        if(!adminPassword.equals(password)){
+            throw new BookStoryApiException(HttpStatus.UNAUTHORIZED, "Incorrect admin password.");
+        }
+        final Book removedBook = bookService.removeBook(book);
+        return new ResponseModel<>(HttpStatus.OK.value(), "Book Removed", removedBook);
+    }
+
     @GetMapping("/all")
     // 모든 책 받기
     public ResponseEntity<List<Book>> getAllBook(){

@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface BookService {
     Book addBook(Book book);
+    Book removeBook(Book book);
     List<Book> getAllBook();
     List<Book> getBookByTitleContaining(String title);
 }
