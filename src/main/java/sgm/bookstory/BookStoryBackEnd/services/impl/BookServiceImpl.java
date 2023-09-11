@@ -17,7 +17,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book addBook(Book book) {
-        if(bookRepository.existsById(book.getId())) throw new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book ID already exists! - Book Title: "+book.getTitle());
+        if(bookRepository.existsById(book.getBookId())) throw new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book ID already exists! - Book Title: "+book.getTitle());
         return bookRepository.save(book);
     }
 

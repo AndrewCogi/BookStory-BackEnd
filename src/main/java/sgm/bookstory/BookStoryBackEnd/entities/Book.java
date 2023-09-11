@@ -7,8 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import sgm.bookstory.BookStoryBackEnd.enums.CategoryType;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
@@ -18,7 +20,7 @@ import java.util.List;
 @Entity(name="book")
 public class Book {
     @Id
-    private Long id;
+    private Long bookId;
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
@@ -32,7 +34,7 @@ public class Book {
     @Column(nullable = false)
     private List<CategoryType> categoryType;
     @Column(nullable = false)
-    String playTime;
+    Long playTime;
     @Column(nullable = false)
     Long favorite;
     @Column(nullable = false)
@@ -43,4 +45,7 @@ public class Book {
     String imagePath;
     @Column(nullable = false)
     String description;
+    @Column
+    @CreationTimestamp
+    Timestamp updateTime;
 }
