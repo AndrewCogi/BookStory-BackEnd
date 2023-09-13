@@ -1,12 +1,15 @@
 package sgm.bookstory.BookStoryBackEnd.services.impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import sgm.bookstory.BookStoryBackEnd.entities.Book;
 import sgm.bookstory.BookStoryBackEnd.models.BookStoryApiException;
 import sgm.bookstory.BookStoryBackEnd.repos.BookRepository;
 import sgm.bookstory.BookStoryBackEnd.services.BookService;
+import sgm.bookstory.BookStoryBackEnd.services.ViewService;
 
 import java.util.List;
 
@@ -14,18 +17,31 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private ViewService viewService;
 
     @Override
     public Book addBook(Book book) {
-        if(bookRepository.existsById(book.getBookId())) throw new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book ID already exists! - Book Title: "+book.getTitle());
+        // 추가할 책 존재여부 확인
+        if(bookRepository.existsById(book.getBookId()))
+            throw new BookStoryApiException(
+                    HttpStatus.BAD_REQUEST,
+                    "Book ID already exists! - Book Title: "+bookRepository.getReferenceById(book.getBookId()).getTitle()
+            );
+        // 부가정보 추가
+        book.setPlayCount(0L);
+        // 책 추가 후 추가한 책 정보 반환
         return bookRepository.save(book);
     }
 
     @Override
     public Book removeBook(Book book){
-        if(!bookRepository.existsById(book.getBookId())) throw new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not exists!");
+        // 지울 책 정보 찾기
+        Book removedBook = bookRepository.findById(book.getBookId()).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not exists!"));
+        // 책 삭제
         bookRepository.deleteById(book.getBookId());
-        return book;
+        // 지워진 책 정보 반환
+        return removedBook;
     }
 
     @Override
@@ -36,5 +52,15 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getBookByTitleContaining(String title) {
         return bookRepository.findByTitleContaining(title).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not found!"));
+    }
+    @Transactional
+    @Scheduled(fixedRate = 60000) // 60초마다 실행
+    public void updateBookInfo_AUTO() {
+        System.out.println("AUTO UPDATE - Book Info");
+        // 책 정보 최신화
+        List<Book> books = bookRepository.findAll();
+        for(Book b : books){
+            b.setPlayCount(viewService.countByBookId(b.getBookId()));
+        }
     }
 }

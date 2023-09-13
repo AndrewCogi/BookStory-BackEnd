@@ -5,6 +5,6 @@ import sgm.bookstory.BookStoryBackEnd.entities.User;
 
 import java.util.Optional;
 
-public interface AuthRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByUserEmail(String email);
 }

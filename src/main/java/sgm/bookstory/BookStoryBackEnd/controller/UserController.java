@@ -10,16 +10,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import sgm.bookstory.BookStoryBackEnd.entities.User;
 import sgm.bookstory.BookStoryBackEnd.models.ResponseModel;
-import sgm.bookstory.BookStoryBackEnd.services.AuthService;
+import sgm.bookstory.BookStoryBackEnd.services.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+public class UserController {
     @Autowired
-    private AuthService authService;
+    private UserService authService;
     @PostMapping("/login")
     public ResponseModel<User> loginUser(@RequestBody User user){
         final User loginUser = authService.userLogin(user);
@@ -40,8 +40,6 @@ public class AuthController {
         final User removedUser = authService.removeUser(user);
         return new ResponseModel<>(HttpStatus.OK.value(), "User Removed", removedUser);
     }
-
-
     @PostMapping("/validate-token")
     @CrossOrigin
     public Map<String, String> validateToken(@RequestBody Map<String, String> request) {
