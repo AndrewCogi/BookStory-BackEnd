@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     public User addUser(User user) {
         // 기존에 존재하는 계정이라도 cognito에서 회원가입에 성공했다면 여기까지 올 수 있기 때문에 예외처리없이 진행
         // 유저의 상태 기본값 설정
-        user.setUserStatus(UserStatus.signup);
+        user.setUserStatus(UserStatus.SIGNUP);
         user.setLastStatusUpdateTime(new Timestamp(new Date().getTime()));
         // 계정 저장 후 계정정보 반환
         return authRepository.save(user);
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         // 로그인하는 유저 찾기
         User findUser = authRepository.findByUserEmail(user.getUserEmail()).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "User not found!"));
         // 유저의 상태 업데이트
-        findUser.setUserStatus(UserStatus.login);
+        findUser.setUserStatus(UserStatus.LOGIN);
         findUser.setLastStatusUpdateTime(new Timestamp(new Date().getTime()));
         // 로그인한 유저의 정보 반환
         return authRepository.save(findUser);
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         // 로그아웃하는 유저 찾기
         User findUser = authRepository.findByUserEmail(user.getUserEmail()).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "User not found!"));
         // 유저의 상태 업데이트
-        findUser.setUserStatus(UserStatus.logout);
+        findUser.setUserStatus(UserStatus.LOGOUT);
         findUser.setLastStatusUpdateTime(new Timestamp(new Date().getTime()));
         // 로그아웃한 유저의 정보 반환
         return authRepository.save(findUser);
