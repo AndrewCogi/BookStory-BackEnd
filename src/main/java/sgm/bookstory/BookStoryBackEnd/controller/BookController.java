@@ -25,6 +25,13 @@ public class BookController {
         return new ResponseModel<>(HttpStatus.OK.value(), "Book Saved", savedBook);
     }
 
+    @PostMapping("/addAll")
+    // 책 여러개 추가하기
+    public ResponseModel<List<Book>> addBooks(@RequestBody List<Book> books){
+        final List<Book> savedBooks = bookService.addBooks(books);
+        return new ResponseModel<>(HttpStatus.OK.value(), "Books Saved", savedBooks);
+    }
+
     @PostMapping("/remove")
     // 책 제거하기
     public ResponseModel<Book> removeBook(@RequestBody Book book){

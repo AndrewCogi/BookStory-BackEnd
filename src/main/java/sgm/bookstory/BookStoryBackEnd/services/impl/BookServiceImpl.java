@@ -11,6 +11,7 @@ import sgm.bookstory.BookStoryBackEnd.repos.BookRepository;
 import sgm.bookstory.BookStoryBackEnd.services.BookService;
 import sgm.bookstory.BookStoryBackEnd.services.ViewService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,12 +27,30 @@ public class BookServiceImpl implements BookService {
         if(bookRepository.existsById(book.getBookId()))
             throw new BookStoryApiException(
                     HttpStatus.BAD_REQUEST,
-                    "Book ID already exists! - Book Title: "+bookRepository.getReferenceById(book.getBookId()).getTitle()
+                    "Book ID("+book.getBookId()+") already exists! - Book Title: "+bookRepository.getReferenceById(book.getBookId()).getTitle()
             );
         // 부가정보 추가
         book.setPlayCount(0L);
         // 책 추가 후 추가한 책 정보 반환
         return bookRepository.save(book);
+    }
+
+    @Override
+    public List<Book> addBooks(List<Book> books){
+        List<Book> savedBooks = new ArrayList<>();
+        // 모든 책에 대해 하나씩 진행
+        for(Book book : books){
+            if(bookRepository.existsById(book.getBookId()))
+                throw new BookStoryApiException(
+                        HttpStatus.BAD_REQUEST,
+                        "Book ID("+book.getBookId()+") already exists! - Book Title: "+bookRepository.getReferenceById(book.getBookId()).getTitle()
+                );
+            // 부가정보 추가
+            book.setPlayCount(0L);
+            // 책 추가
+            savedBooks.add(book);
+        }
+        return bookRepository.saveAll(savedBooks);
     }
 
     @Override
