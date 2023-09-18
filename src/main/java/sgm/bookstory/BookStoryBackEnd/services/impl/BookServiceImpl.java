@@ -2,16 +2,21 @@ package sgm.bookstory.BookStoryBackEnd.services.impl;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import sgm.bookstory.BookStoryBackEnd.entities.Book;
+import sgm.bookstory.BookStoryBackEnd.enums.CategoryType;
 import sgm.bookstory.BookStoryBackEnd.models.BookStoryApiException;
 import sgm.bookstory.BookStoryBackEnd.repos.BookRepository;
 import sgm.bookstory.BookStoryBackEnd.services.BookService;
 import sgm.bookstory.BookStoryBackEnd.services.ViewService;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -72,6 +77,13 @@ public class BookServiceImpl implements BookService {
     public List<Book> getBookByTitleContaining(String title) {
         return bookRepository.findByTitleContaining(title).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not found!"));
     }
+
+    @Override
+    public List<Book> getTop5BooksByCategoryAgeOrderByPlayCountDesc(CategoryType categoryType) {
+        Pageable pageable = PageRequest.of(0, 5); // 첫 페이지, 5개 항목
+        return bookRepository.findTop5ByCategoryAgeOrderByPlayCountDesc(categoryType, pageable).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not found!"));
+    }
+
     @Transactional
     @Scheduled(fixedRate = 60000) // 60초마다 실행
     public void updateBookInfo_AUTO() {

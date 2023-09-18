@@ -29,8 +29,10 @@ public class Book {
     @Column(nullable = false)
     private Long bookPage;
     @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private CategoryType categoryAge;
     @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private List<CategoryType> categoryType;
     @Column(nullable = false)
     private Long playTime;
