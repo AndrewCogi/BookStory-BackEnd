@@ -33,6 +33,7 @@ public class Book {
     private CategoryType categoryAge;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
+    @ElementCollection(targetClass = CategoryType.class)
     private List<CategoryType> categoryType;
     @Column(nullable = false)
     private Long playTime;

@@ -26,6 +26,7 @@ public class User {
     // 자동으로 추가되는 정보들 -------------
     // UserServiceImpl 에서 추가됨
     @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private UserStatus userStatus;
     @Column(nullable = false)
     private Timestamp lastStatusUpdateTime;
