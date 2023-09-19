@@ -13,10 +13,10 @@ public enum CategoryType {
     learning,       // 학습
     sophistication, // 교양
     culture,        // 문화
-    art,            // 예술
     society,        // 사회
-    history,        // 역사
     natural,        // 자연
     science,        // 과학
+    masterpiece,    // 명작
+    classic,        // 고전
     none,           // unknown
 }

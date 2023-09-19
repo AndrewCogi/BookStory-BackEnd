@@ -63,8 +63,9 @@ public class BookController {
     @GetMapping("getBooksByCategoryType/{categoryType}")
     // 해당 카테고리(not age)에 포함된 책 최대 n(limit)권 반환 (playCount 높은 순)
     public ResponseEntity<List<Book>> getBooksByCategoryTypeOrderByPlayCountDesc(
-            @PathVariable(name = "categoryType") CategoryType categoryType,
+            @PathVariable(name = "categoryType") List<CategoryType> categoryTypes,
             @RequestParam(name = "limit") String limit) {
-        return ResponseEntity.ok(bookService.getBooksByCategoryTypeOrderByPlayCountDesc(categoryType,Integer.parseInt(limit)));
+        System.out.println("testing"+categoryTypes);
+        return ResponseEntity.ok(bookService.getBooksByCategoryTypeOrderByPlayCountDesc(categoryTypes,Integer.parseInt(limit)));
     }
 }
