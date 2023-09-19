@@ -15,6 +15,7 @@ import sgm.bookstory.BookStoryBackEnd.services.BookService;
 import sgm.bookstory.BookStoryBackEnd.services.ViewService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -78,9 +79,15 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getBooksByCategoryAgeOrderByPlayCountDesc(CategoryType categoryType, int limit) {
-        Pageable pageable = PageRequest.of(0, limit); // 첫 페이지, n개 항목
+        Pageable pageable = PageRequest.of(0, limit); // n(limit)개 항목
         return bookRepository.findBooksByCategoryAgeOrderByPlayCountDesc(categoryType, pageable).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not found!"));
-//        return bookRepository.findTopNByCategoryAgeOrderByPlayCountDesc(categoryType, limit).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not found!"));
+    }
+
+    @Override
+    public List<Book> getBooksByCategoryTypeOrderByPlayCountDesc(CategoryType categoryType, int limit) {
+        Pageable pageable = PageRequest.of(0, limit); // n(limit)개 항목
+        List<CategoryType> categoryTypes = Arrays.asList(categoryType);
+        return bookRepository.findByCategoryTypeIn(categoryTypes, pageable).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not found!"));
     }
 
     @Transactional

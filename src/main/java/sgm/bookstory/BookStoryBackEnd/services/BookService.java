@@ -12,4 +12,5 @@ public interface BookService {
     List<Book> getAllBook();
     List<Book> getBookByTitleContaining(String title);
     List<Book> getBooksByCategoryAgeOrderByPlayCountDesc(CategoryType categoryType, int limit);
+    List<Book> getBooksByCategoryTypeOrderByPlayCountDesc(CategoryType categoryType, int parseInt);
 }
