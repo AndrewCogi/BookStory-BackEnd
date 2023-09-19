@@ -10,5 +10,5 @@ import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
     Optional<List<Book>> findByTitleContaining(String title); // 책 제목에 'title' 이 포함되는 책 정보들 반환
-    Optional<List<Book>> findTop5ByCategoryAgeOrderByPlayCountDesc(CategoryType categoryAge, Pageable pageable);
+    Optional<List<Book>> findBooksByCategoryAgeOrderByPlayCountDesc(CategoryType categoryAge, Pageable pageable);
 }

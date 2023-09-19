@@ -11,5 +11,5 @@ public interface BookService {
     Book removeBook(Book book);
     List<Book> getAllBook();
     List<Book> getBookByTitleContaining(String title);
-    List<Book> getTop5BooksByCategoryAgeOrderByPlayCountDesc(CategoryType categoryType);
+    List<Book> getBooksByCategoryAgeOrderByPlayCountDesc(CategoryType categoryType, int limit);
 }

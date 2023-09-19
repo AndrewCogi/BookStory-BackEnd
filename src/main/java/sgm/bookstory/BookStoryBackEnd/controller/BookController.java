@@ -52,9 +52,11 @@ public class BookController {
         return ResponseEntity.ok(bookService.getBookByTitleContaining(title));
     }
 
-    @GetMapping("get5BooksByCategoryAge/{categoryAge}")
-    // 해당 카테고리에 포함된 책 최대 5권 반환 (playCount 높은 순)
-    public ResponseEntity<List<Book>> getTop5BooksByCategoryAgeOrderByPlayCountDesc(@PathVariable(name="categoryAge") CategoryType categoryType){
-        return ResponseEntity.ok(bookService.getTop5BooksByCategoryAgeOrderByPlayCountDesc(categoryType));
+    @GetMapping("getBooksByCategoryAge/{categoryAge}")
+    // 해당 카테고리에 포함된 책 최대 n(limit)권 반환 (playCount 높은 순)
+    public ResponseEntity<List<Book>> getBooksByCategoryAgeOrderByPlayCountDesc(
+            @PathVariable(name="categoryAge") CategoryType categoryType,
+            @RequestParam(name = "limit") String limit) {
+        return ResponseEntity.ok(bookService.getBooksByCategoryAgeOrderByPlayCountDesc(categoryType,Integer.parseInt(limit)));
     }
 }
