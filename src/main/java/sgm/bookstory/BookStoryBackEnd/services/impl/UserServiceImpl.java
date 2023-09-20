@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         List<View> views = findUser.getViews();
         for(View v : views) v.setUser(null);
         // 유저 삭제
-        authRepository.delete(user);
+        authRepository.deleteById(user.getUserEmail());
         // 삭제된 유저 정보 반환
         return findUser;
     }
