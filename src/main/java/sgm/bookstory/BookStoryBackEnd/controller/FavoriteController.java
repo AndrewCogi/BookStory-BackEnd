@@ -30,7 +30,16 @@ public class FavoriteController {
     }
 
     @GetMapping("/{userEmail}")
-    public ResponseEntity<List<Favorite>> getAllFavoriteByUser_UserEmail(@PathVariable(name = "userEmail") String userEmail){
+    public ResponseEntity<List<Favorite>> getAllFavoriteByUser_UserEmail(@PathVariable(name = "userEmail") String userEmail) {
+        // userEmail에 대한 모든 favorite 값 반환
         return ResponseEntity.ok(favoriteService.getAllFavoriteByUser_UserEmail(userEmail));
+    }
+
+    @GetMapping("/{userEmail}/{bookId}")
+    public ResponseModel<Boolean> existsFavorite(
+            @PathVariable(name = "userEmail") String userEmail,
+            @PathVariable(name = "bookId") String bookId){
+        // userEmail과 bookId에 대한 favorite 존재여부 반환
+        return new ResponseModel<>(HttpStatus.OK.value(), "Favorite find result",favoriteService.existsFavorite(userEmail, Long.parseLong(bookId)));
     }
 }

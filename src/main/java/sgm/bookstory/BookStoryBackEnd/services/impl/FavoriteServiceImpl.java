@@ -34,6 +34,10 @@ public class FavoriteServiceImpl implements FavoriteService {
         // 지워진 favorite 정보 반환
         return removedFavorite;
     }
+    @Override
+    public boolean existsFavorite(String userEmail, Long bookId) {
+        return favoriteRepository.existsByUser_UserEmailAndBook_BookId(userEmail,bookId);
+    }
 
     @Override
     public List<Favorite> getAllFavoriteByUser_UserEmail(String userEmail){
