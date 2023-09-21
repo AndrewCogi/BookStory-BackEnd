@@ -1,10 +1,13 @@
 package sgm.bookstory.BookStoryBackEnd.services.impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import sgm.bookstory.BookStoryBackEnd.entities.Book;
 import sgm.bookstory.BookStoryBackEnd.entities.Favorite;
 import sgm.bookstory.BookStoryBackEnd.models.BookStoryApiException;
+import sgm.bookstory.BookStoryBackEnd.repos.BookRepository;
 import sgm.bookstory.BookStoryBackEnd.repos.FavoriteRepository;
 import sgm.bookstory.BookStoryBackEnd.services.FavoriteService;
 
@@ -14,6 +17,8 @@ import java.util.List;
 public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
     private FavoriteRepository favoriteRepository;
+    @Autowired
+    private BookRepository bookRepository;
     @Override
     public Favorite addFavorite(Favorite favorite) {
         // 추가할 Favorite 존재여부 확인 (userEmail & bookId)
@@ -42,5 +47,20 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public List<Favorite> getAllFavoriteByUser_UserEmail(String userEmail){
         return favoriteRepository.findAllByUser_UserEmail(userEmail).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Favorite not found!"));
+    }
+
+    @Override
+    public Long countByBookId(Long bookId){
+        // bookId에 해당하는 record의 개수 반환
+        return favoriteRepository.countByBookId(bookId);
+    }
+
+    @Override
+    @Transactional
+    public void updateBookInfo_MANUAL(Book book) {
+        System.out.println("MANUAL UPDATE - Book Info (Favorite)");
+        // 책 정보 최신화 - favorite
+        Book findBook = bookRepository.findById(book.getBookId()).orElseThrow();
+        findBook.setFavoriteCount(countByBookId(findBook.getBookId()));
     }
 }

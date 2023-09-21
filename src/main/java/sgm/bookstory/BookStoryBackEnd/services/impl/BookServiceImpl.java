@@ -11,6 +11,7 @@ import sgm.bookstory.BookStoryBackEnd.entities.Book;
 import sgm.bookstory.BookStoryBackEnd.enums.CategoryType;
 import sgm.bookstory.BookStoryBackEnd.models.BookStoryApiException;
 import sgm.bookstory.BookStoryBackEnd.repos.BookRepository;
+import sgm.bookstory.BookStoryBackEnd.repos.FavoriteRepository;
 import sgm.bookstory.BookStoryBackEnd.services.BookService;
 import sgm.bookstory.BookStoryBackEnd.services.ViewService;
 
@@ -24,6 +25,8 @@ public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
     @Autowired
     private ViewService viewService;
+    @Autowired
+    private FavoriteRepository favoriteService;
 
     @Override
     public Book addBook(Book book) {
@@ -97,6 +100,7 @@ public class BookServiceImpl implements BookService {
         List<Book> books = bookRepository.findAll();
         for(Book b : books){
             b.setPlayCount(viewService.countByBookId(b.getBookId()));
+            b.setFavoriteCount(favoriteService.countByBookId(b.getBookId()));
         }
     }
 }

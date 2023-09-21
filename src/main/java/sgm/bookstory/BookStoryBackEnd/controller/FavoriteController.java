@@ -20,12 +20,14 @@ public class FavoriteController {
     @PostMapping("/add")
     public ResponseModel<Favorite> addFavorite(@RequestBody Favorite favorite){
         final Favorite savedFavorite = favoriteService.addFavorite(favorite);
+        favoriteService.updateBookInfo_MANUAL(savedFavorite.getBook());
         return new ResponseModel<>(HttpStatus.OK.value(), "Favorite Saved", savedFavorite);
     }
 
     @PostMapping("/remove")
     public ResponseModel<Favorite> removeFavorite(@RequestBody Favorite favorite){
         final Favorite removedFavorite = favoriteService.removeFavorite(favorite);
+        favoriteService.updateBookInfo_MANUAL(removedFavorite.getBook());
         return new ResponseModel<>(HttpStatus.OK.value(), "Favorite Removed", removedFavorite);
     }
 

@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import sgm.bookstory.BookStoryBackEnd.enums.UserStatus;
 
 import java.sql.Timestamp;
@@ -36,7 +34,7 @@ public class User {
 
     // 테이블 간 연관관계 설정 --------------
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<View> views;
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

@@ -52,6 +52,8 @@ public class Book {
     // BookServiceImpl 에서 추가됨
     @Column(nullable = false)
     private Long playCount;
+    @Column(nullable = false)
+    private Long favoriteCount;
     // ----------------------------------
 
     // 테이블 간 연관관계 설정 --------------

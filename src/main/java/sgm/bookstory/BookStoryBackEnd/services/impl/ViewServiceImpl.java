@@ -29,7 +29,7 @@ public class ViewServiceImpl implements ViewService {
     @Override
     @Transactional
     public void updateBookInfo_MANUAL(Book book) {
-        System.out.println("MANUAL UPDATE - Book Info");
+        System.out.println("MANUAL UPDATE - Book Info (View)");
         // 책 정보 최신화 - playCount
         Book findBook = bookRepository.findById(book.getBookId()).orElseThrow();
         findBook.setPlayCount(countByBookId(findBook.getBookId()));
