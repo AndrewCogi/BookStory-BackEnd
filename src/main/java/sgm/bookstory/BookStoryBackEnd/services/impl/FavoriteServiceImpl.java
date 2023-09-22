@@ -58,7 +58,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     @Transactional
     public void updateBookInfo_MANUAL(Book book) {
-        System.out.println("MANUAL UPDATE - Book Info (Favorite)");
+        System.out.println("MANUAL UPDATE - Book Info (Favorite, BookId: "+book.getBookId()+")");
         // 책 정보 최신화 - favorite
         Book findBook = bookRepository.findById(book.getBookId()).orElseThrow();
         findBook.setFavoriteCount(countByBookId(findBook.getBookId()));
