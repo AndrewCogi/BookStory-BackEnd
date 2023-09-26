@@ -2,6 +2,7 @@ package sgm.bookstory.BookStoryBackEnd.services.impl;
 
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClientBuilder;
+import com.amazonaws.services.cognitoidp.model.AttributeType;
 import com.amazonaws.services.cognitoidp.model.GetUserRequest;
 import com.amazonaws.services.cognitoidp.model.GetUserResult;
 import com.amazonaws.services.cognitoidp.model.NotAuthorizedException;
@@ -98,7 +99,7 @@ public class UserServiceImpl implements UserService {
             System.out.println("getUserResult: "+getUserResult);
             System.out.println("getUserName: "+getUserResult.getUsername());
             // 사용자의 이메일 비교
-            if(getUserResult.getUsername().equals(userEmail)){
+            if(extractEmailFromAttributes(getUserResult.getUserAttributes()).equals(userEmail)){
                 System.out.println("[isValidUser Result] : Success! (UserEmail: "+userEmail+")");
                 return true;
             }
@@ -112,5 +113,14 @@ public class UserServiceImpl implements UserService {
             System.out.println("[isValidUser Result] : User UnAuthorized!");
             return false;
         }
+    }
+
+    private String extractEmailFromAttributes(List<AttributeType> attributes) {
+        for (AttributeType attribute : attributes) {
+            if ("email".equals(attribute.getName())) {
+                return attribute.getValue();
+            }
+        }
+        return null;
     }
 }
