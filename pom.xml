@@ -69,6 +69,11 @@
 			<artifactId>aws-java-sdk-cognitoidp</artifactId>
 			<version>1.12.471</version>
 		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>cognitoidentityprovider</artifactId>
+			<version>2.20.66</version>
+		</dependency>
 		<!-- AWS -->
 	</dependencies>
 

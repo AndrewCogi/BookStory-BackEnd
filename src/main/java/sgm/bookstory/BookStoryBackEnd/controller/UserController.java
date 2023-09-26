@@ -2,15 +2,14 @@ package sgm.bookstory.BookStoryBackEnd.controller;
 
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClientBuilder;
-import com.amazonaws.services.cognitoidp.model.GetUserRequest;
-import com.amazonaws.services.cognitoidp.model.GetUserResult;
-import com.amazonaws.services.cognitoidp.model.NotAuthorizedException;
+import com.amazonaws.services.cognitoidp.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import sgm.bookstory.BookStoryBackEnd.entities.User;
 import sgm.bookstory.BookStoryBackEnd.models.ResponseModel;
 import sgm.bookstory.BookStoryBackEnd.services.UserService;
+import com.amazonaws.services.cognitoidp.model.GetUserRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,10 +35,31 @@ public class UserController {
         return new ResponseModel<>(HttpStatus.OK.value(), "User Added", savedUser);
     }
     @PostMapping("/remove")
-    public ResponseModel<User> removeUser(@RequestBody User user){
-        final User removedUser = authService.removeUser(user);
-        return new ResponseModel<>(HttpStatus.OK.value(), "User Removed", removedUser);
+    public ResponseModel<User> removeUser(@RequestBody User user, @RequestHeader("Authorization") String authHeader){
+        String userEmail = user.getUserEmail();
+        String accessToken = authHeader.substring(7);
+
+        System.out.println("userEmail: "+userEmail);
+        System.out.println("Authentication: Bearer "+accessToken);
+
+        // TODO : 자,, 이 토큰을 어떻게 Amplify Cognito에서 받아올 것인지 생각해보자..
+        // AWS Cognito 설정
+        AWSCognitoIdentityProvider cognitoClient = AWSCognitoIdentityProviderClientBuilder.standard().build();
+        try {
+            // 토큰 유효성 검사
+            GetUserRequest getUserRequest = new GetUserRequest().withAccessToken(accessToken);
+            GetUserResult getUserResult = cognitoClient.getUser(getUserRequest);
+            System.out.println(getUserResult.getUsername());
+
+            // 유효한 사용자 정보
+            final User removedUser = authService.removeUser(user);
+            return new ResponseModel<>(HttpStatus.OK.value(), "User Removed", removedUser);
+        } catch (NotAuthorizedException e) {
+            // 토큰이 유효하지 않을 때의 처리
+            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized", null);
+        }
     }
+
     @PostMapping("/validate-token")
     @CrossOrigin
     public Map<String, String> validateToken(@RequestBody Map<String, String> request) {
