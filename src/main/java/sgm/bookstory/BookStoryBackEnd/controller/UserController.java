@@ -63,30 +63,30 @@ public class UserController {
         }
     }
 
-    @PostMapping("/validate-token")
-    @CrossOrigin
-    public Map<String, String> validateToken(@RequestBody Map<String, String> request) {
-        String accessToken = request.get("accessToken");
-
-        // AWS Cognito 설정
-        AWSCognitoIdentityProvider cognitoClient = AWSCognitoIdentityProviderClientBuilder.standard().build();
-        Map<String, String> response = new HashMap<>();
-
-        try {
-            // 토큰 유효성 검사
-            GetUserRequest getUserRequest = new GetUserRequest().withAccessToken(accessToken);
-            System.out.println("getUserRequest (vt): "+getUserRequest);
-            GetUserResult getUserResult = cognitoClient.getUser(getUserRequest);
-            System.out.println("getUserResult (vt): "+getUserResult);
-
-            // 유효한 사용자 정보
-            response.put("message", "Token is valid");
-            response.put("username", getUserResult.getUsername());
-        } catch (NotAuthorizedException e) {
-            // 토큰이 유효하지 않을 때의 처리
-            response.put("message", "Token is not valid");
-        }
-
-        return response;
-    }
+//    @PostMapping("/validate-token")
+//    @CrossOrigin
+//    public Map<String, String> validateToken(@RequestBody Map<String, String> request) {
+//        String accessToken = request.get("accessToken");
+//
+//        // AWS Cognito 설정
+//        AWSCognitoIdentityProvider cognitoClient = AWSCognitoIdentityProviderClientBuilder.standard().build();
+//        Map<String, String> response = new HashMap<>();
+//
+//        try {
+//            // 토큰 유효성 검사
+//            GetUserRequest getUserRequest = new GetUserRequest().withAccessToken(accessToken);
+//            System.out.println("getUserRequest (vt): "+getUserRequest);
+//            GetUserResult getUserResult = cognitoClient.getUser(getUserRequest);
+//            System.out.println("getUserResult (vt): "+getUserResult);
+//
+//            // 유효한 사용자 정보
+//            response.put("message", "Token is valid");
+//            response.put("username", getUserResult.getUsername());
+//        } catch (NotAuthorizedException e) {
+//            // 토큰이 유효하지 않을 때의 처리
+//            response.put("message", "Token is not valid");
+//        }
+//
+//        return response;
+//    }
 }
