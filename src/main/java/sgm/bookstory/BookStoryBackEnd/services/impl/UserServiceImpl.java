@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
             }
             // 사용자가 일치하지 않음
             else {
-                System.out.println("[isValidUser Result] : User Mismatch! (UserEmail: "+userEmail+", TokenEmail: "+getUserResult.getUsername()+")");
+                System.out.println("[isValidUser Result] : User Mismatch! (UserEmail: "+userEmail+", TokenEmail: "+extractEmailFromAttributes(getUserResult.getUserAttributes())+")");
                 return false;
             }
         } catch (NotAuthorizedException e) {
