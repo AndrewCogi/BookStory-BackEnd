@@ -45,10 +45,13 @@ public class UserController {
         // TODO : 자,, 이 토큰을 어떻게 Amplify Cognito에서 받아올 것인지 생각해보자..
         // AWS Cognito 설정
         AWSCognitoIdentityProvider cognitoClient = AWSCognitoIdentityProviderClientBuilder.standard().build();
+        System.out.println("cognitoClient: "+cognitoClient);
         try {
             // 토큰 유효성 검사
             GetUserRequest getUserRequest = new GetUserRequest().withAccessToken(accessToken);
+            System.out.println("getUserRequest: "+getUserRequest);
             GetUserResult getUserResult = cognitoClient.getUser(getUserRequest);
+            System.out.println("getUserResult: "+getUserResult);
             System.out.println(getUserResult.getUsername());
 
             // 유효한 사용자 정보
