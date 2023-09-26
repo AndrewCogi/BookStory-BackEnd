@@ -36,30 +36,13 @@ public class UserController {
     }
     @PostMapping("/remove")
     public ResponseModel<User> removeUser(@RequestBody User user, @RequestHeader("Authorization") String authHeader){
-        String userEmail = user.getUserEmail();
-        String accessToken = authHeader.substring(7);
-
-        System.out.println("userEmail: "+userEmail);
-        System.out.println("Authentication: Bearer "+accessToken);
-
-        // TODO : 자,, 이 토큰을 어떻게 Amplify Cognito에서 받아올 것인지 생각해보자..
-        // AWS Cognito 설정
-        AWSCognitoIdentityProvider cognitoClient = AWSCognitoIdentityProviderClientBuilder.standard().build();
-        System.out.println("cognitoClient: "+cognitoClient);
-        try {
-            // 토큰 유효성 검사
-            GetUserRequest getUserRequest = new GetUserRequest().withAccessToken(accessToken);
-            System.out.println("getUserRequest: "+getUserRequest);
-            GetUserResult getUserResult = cognitoClient.getUser(getUserRequest);
-            System.out.println("getUserResult: "+getUserResult);
-            System.out.println(getUserResult.getUsername());
-
-            // 유효한 사용자 정보
+        if(authService.isValidUser(user.getUserEmail(), authHeader)){
             final User removedUser = authService.removeUser(user);
             return new ResponseModel<>(HttpStatus.OK.value(), "User Removed", removedUser);
-        } catch (NotAuthorizedException e) {
-            // 토큰이 유효하지 않을 때의 처리
-            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized", null);
+        }
+        // 사용자가 일치하지 않음
+        else {
+            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "User mismatch", null);
         }
     }
 

@@ -5,9 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sgm.bookstory.BookStoryBackEnd.entities.Favorite;
+import sgm.bookstory.BookStoryBackEnd.entities.User;
 import sgm.bookstory.BookStoryBackEnd.entities.View;
 import sgm.bookstory.BookStoryBackEnd.models.ResponseModel;
 import sgm.bookstory.BookStoryBackEnd.services.FavoriteService;
+import sgm.bookstory.BookStoryBackEnd.services.UserService;
 import sgm.bookstory.BookStoryBackEnd.services.ViewService;
 
 import java.util.List;
@@ -17,6 +19,8 @@ import java.util.List;
 public class FavoriteController {
     @Autowired
     private FavoriteService favoriteService;
+    @Autowired
+    private UserService userService;
     @PostMapping("/add")
     public ResponseModel<Favorite> addFavorite(@RequestBody Favorite favorite){
         final Favorite savedFavorite = favoriteService.addFavorite(favorite);
@@ -32,9 +36,14 @@ public class FavoriteController {
     }
 
     @GetMapping("/{userEmail}")
-    public ResponseEntity<List<Favorite>> getAllFavoriteByUser_UserEmail(@PathVariable(name = "userEmail") String userEmail) {
-        // userEmail에 대한 모든 favorite 값 반환
-        return ResponseEntity.ok(favoriteService.getAllFavoriteByUser_UserEmail(userEmail));
+    public ResponseEntity<List<Favorite>> getAllFavoriteByUser_UserEmail(
+            @PathVariable(name = "userEmail") String userEmail,
+            @RequestHeader(name = "Authorization") String authHeader) {
+        if(userService.isValidUser(userEmail, authHeader)){
+            // userEmail에 대한 모든 favorite 값 반환
+            return ResponseEntity.ok(favoriteService.getAllFavoriteByUser_UserEmail(userEmail));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @GetMapping("/{userEmail}/{bookId}")

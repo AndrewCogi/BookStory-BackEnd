@@ -7,4 +7,5 @@ public interface UserService {
     User removeUser(User user);
     User userLogin(User user);
     User userLogout(User user);
+    boolean isValidUser(String userEmail, String authHeader);
 }

@@ -1,5 +1,10 @@
 package sgm.bookstory.BookStoryBackEnd.services.impl;
 
+import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
+import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClientBuilder;
+import com.amazonaws.services.cognitoidp.model.GetUserRequest;
+import com.amazonaws.services.cognitoidp.model.GetUserResult;
+import com.amazonaws.services.cognitoidp.model.NotAuthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -9,6 +14,7 @@ import sgm.bookstory.BookStoryBackEnd.entities.User;
 import sgm.bookstory.BookStoryBackEnd.entities.View;
 import sgm.bookstory.BookStoryBackEnd.enums.UserStatus;
 import sgm.bookstory.BookStoryBackEnd.models.BookStoryApiException;
+import sgm.bookstory.BookStoryBackEnd.models.ResponseModel;
 import sgm.bookstory.BookStoryBackEnd.repos.UserRepository;
 import sgm.bookstory.BookStoryBackEnd.services.FavoriteService;
 import sgm.bookstory.BookStoryBackEnd.services.UserService;
@@ -17,7 +23,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -73,5 +78,36 @@ public class UserServiceImpl implements UserService {
         findUser.setLastStatusUpdateTime(new Timestamp(new Date().getTime()));
         // 로그아웃한 유저의 정보 반환
         return authRepository.save(findUser);
+    }
+
+    @Override
+    public boolean isValidUser(String userEmail, String authHeader){
+        String accessToken = authHeader.substring(7);
+
+        System.out.println("userEmail: "+userEmail);
+        System.out.println("Authentication: Bearer "+accessToken);
+
+        // AWS Cognito 설정
+        AWSCognitoIdentityProvider cognitoClient = AWSCognitoIdentityProviderClientBuilder.standard().build();
+        System.out.println("cognitoClient: "+cognitoClient);
+        try {
+            // 토큰 유효성 검사
+            GetUserRequest getUserRequest = new GetUserRequest().withAccessToken(accessToken);
+            System.out.println("getUserRequest: "+getUserRequest);
+            GetUserResult getUserResult = cognitoClient.getUser(getUserRequest);
+            System.out.println("getUserResult: "+getUserResult);
+            System.out.println("getUserName: "+getUserResult.getUsername());
+            // 사용자의 이메일 비교
+            if(getUserResult.getUsername().equals(userEmail)){
+                return true;
+            }
+            // 사용자가 일치하지 않음
+            else {
+                return false;
+            }
+        } catch (NotAuthorizedException e) {
+            // 토큰이 유효하지 않을 때의 처리
+            return false;
+        }
     }
 }
