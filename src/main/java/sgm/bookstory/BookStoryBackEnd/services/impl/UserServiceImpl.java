@@ -99,14 +99,17 @@ public class UserServiceImpl implements UserService {
             System.out.println("getUserName: "+getUserResult.getUsername());
             // 사용자의 이메일 비교
             if(getUserResult.getUsername().equals(userEmail)){
+                System.out.println("[isValidUser Result] : Success! (UserEmail: "+userEmail+")");
                 return true;
             }
             // 사용자가 일치하지 않음
             else {
+                System.out.println("[isValidUser Result] : User Mismatch! (UserEmail: "+userEmail+", TokenEmail: "+getUserResult.getUsername()+")");
                 return false;
             }
         } catch (NotAuthorizedException e) {
             // 토큰이 유효하지 않을 때의 처리
+            System.out.println("[isValidUser Result] : User UnAuthorized!");
             return false;
         }
     }
