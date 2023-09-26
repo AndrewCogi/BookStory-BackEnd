@@ -75,7 +75,9 @@ public class UserController {
         try {
             // 토큰 유효성 검사
             GetUserRequest getUserRequest = new GetUserRequest().withAccessToken(accessToken);
+            System.out.println("getUserRequest (vt): "+getUserRequest);
             GetUserResult getUserResult = cognitoClient.getUser(getUserRequest);
+            System.out.println("getUserResult (vt): "+getUserResult);
 
             // 유효한 사용자 정보
             response.put("message", "Token is valid");
