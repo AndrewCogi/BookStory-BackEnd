@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import sgm.bookstory.BookStoryBackEnd.enums.CategoryType;
 
 import java.sql.Timestamp;
@@ -42,7 +40,11 @@ public class Book {
     @Column(nullable = false)
     private String imagePath;
     @Column(nullable = false)
-    private String description;
+    private String bookDescriptionPath;
+    @Column(nullable = false)
+    private String writerDescriptionPath;
+    @Column(nullable = false)
+    private String publisherDescriptionPath;
     @Column(nullable = false)
     @CreationTimestamp
     private Timestamp creationTime;
