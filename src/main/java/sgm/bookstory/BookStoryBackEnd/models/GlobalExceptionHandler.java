@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
         errorDetails.setErrorMessage(exception.getLocalizedMessage());
         errorDetails.setDevErrorMessage(request.getDescription(false));
         errorDetails.setTimestamp(System.currentTimeMillis());
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorDetails, exception.getStatus());
     }
 //
 //    @ExceptionHandler(AccessDeniedException.class)
