@@ -40,12 +40,21 @@ public class FavoriteController {
     public ResponseEntity<List<Favorite>> getAllFavoriteByUser_UserEmail(
             @PathVariable(name = "userEmail") String userEmail,
             @RequestHeader(name = "Authorization") String authHeader) {
-        if(userService.isValidUser(userEmail, authHeader)){
+        int statusCode = userService.isValidUser(userEmail, authHeader).getStatusCode();
+        if(statusCode == 200){
             // userEmail에 대한 모든 favorite 값 반환
             return ResponseEntity.ok(favoriteService.getAllFavoriteByUser_UserEmail(userEmail));
         }
-        List<Favorite> emptyList = new ArrayList<>();
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(emptyList);
+        else if(statusCode == 403){
+            // 토큰 만료를 알림
+            List<Favorite> emptyList = new ArrayList<>();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(emptyList);
+        }
+        else{
+            // 로그인하지 않은 사용자
+            List<Favorite> emptyList = new ArrayList<>();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(emptyList);
+        }
     }
 
     @GetMapping("/{userEmail}/{bookId}")
@@ -53,10 +62,19 @@ public class FavoriteController {
             @PathVariable(name = "userEmail") String userEmail,
             @PathVariable(name = "bookId") String bookId,
             @RequestHeader(name = "Authorization") String authHeader){
-        if(userService.isValidUser(userEmail, authHeader)){
+        int statusCode = userService.isValidUser(userEmail, authHeader).getStatusCode();
+        if(statusCode == 200){
             // userEmail과 bookId에 대한 favorite 존재여부 반환
             return new ResponseModel<>(HttpStatus.OK.value(), "Favorite find result",favoriteService.existsFavorite(userEmail, Long.parseLong(bookId)));
         }
-        return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized", null);
+        else if(statusCode == 403){
+            // 토큰 만료를 알림
+            List<Favorite> emptyList = new ArrayList<>();
+            return new ResponseModel<>(HttpStatus.FORBIDDEN.value(), "Token Expired", null);
+        }
+        else{
+            // 로그인하지 않은 사용자
+            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized", null);
+        }
     }
 }

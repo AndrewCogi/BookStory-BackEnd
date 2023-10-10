@@ -21,9 +21,8 @@ import sgm.bookstory.BookStoryBackEnd.services.FavoriteService;
 import sgm.bookstory.BookStoryBackEnd.services.UserService;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -82,7 +81,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isValidUser(String userEmail, String authHeader){
+    public ResponseModel<Boolean> isValidUser(String userEmail, String authHeader){
         String accessToken = authHeader.substring(7);
 
         System.out.println("userEmail: "+userEmail);
@@ -99,20 +98,39 @@ public class UserServiceImpl implements UserService {
             System.out.println("getUserResult: "+getUserResult);
             System.out.println("getUserName: "+getUserResult.getUsername());
             // 사용자의 이메일 비교
-            if(extractEmailFromAttributes(getUserResult.getUserAttributes()).equals(userEmail)){
-                System.out.println("[isValidUser Result] : Success! (UserEmail: "+userEmail+")");
-                return true;
+            if(userEmail.equals(extractEmailFromAttributes(getUserResult.getUserAttributes()))){
+                // 사용자의 토큰 만료 검사
+                Date currentDate = new Date(new Timestamp(System.currentTimeMillis()).getTime());
+                Date userDate = new Date(getLastStatusUpdateTime(userEmail).getTime());
+                System.out.println("currentDate: "+currentDate);
+                System.out.println("userDate: "+userDate);
+                long diffInHours = TimeUnit.MILLISECONDS.toHours(currentDate.getTime()-userDate.getTime());
+                System.out.println("diffInHours: "+diffInHours);
+                if(diffInHours <= 24){
+                    System.out.println("[userEmail compare Result] : Success! (UserEmail: "+userEmail+")");
+                    return new ResponseModel<>(HttpStatus.OK.value(), "Success", true);
+                }
+                // 토큰이 만료됨
+                else {
+                    return new ResponseModel<>(HttpStatus.FORBIDDEN.value(), "Token Expired", false);
+                }
             }
             // 사용자가 일치하지 않음
             else {
                 System.out.println("[isValidUser Result] : User Mismatch! (UserEmail: "+userEmail+", TokenEmail: "+extractEmailFromAttributes(getUserResult.getUserAttributes())+")");
-                return false;
+                return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "User Mismatch", false);
             }
         } catch (NotAuthorizedException e) {
             // 토큰이 유효하지 않을 때의 처리
             System.out.println("[isValidUser Result] : User UnAuthorized!");
-            return false;
+            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "User UnAuthorized", false);
         }
+    }
+
+    @Override
+    public Timestamp getLastStatusUpdateTime(String userEmail) {
+        final User findUser = authRepository.findByUserEmail(userEmail).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "User not found!"));
+        return findUser.getLastStatusUpdateTime();
     }
 
     private String extractEmailFromAttributes(List<AttributeType> attributes) {
