@@ -23,17 +23,39 @@ public class FavoriteController {
     @Autowired
     private UserService userService;
     @PostMapping("/add")
-    public ResponseModel<Favorite> addFavorite(@RequestBody Favorite favorite){
-        final Favorite savedFavorite = favoriteService.addFavorite(favorite);
-        favoriteService.updateBookInfo_MANUAL(savedFavorite.getBook());
-        return new ResponseModel<>(HttpStatus.OK.value(), "Favorite Saved", savedFavorite);
+    public ResponseModel<Favorite> addFavorite(@RequestBody Favorite favorite, @RequestHeader(name = "Authorization") String authHeader){
+        int statusCode = userService.isValidUser(favorite.getUser().getUserEmail(), authHeader).getStatusCode();
+        if (statusCode == 200) {
+            final Favorite savedFavorite = favoriteService.addFavorite(favorite);
+            favoriteService.updateBookInfo_MANUAL(savedFavorite.getBook());
+            return new ResponseModel<>(HttpStatus.OK.value(), "Favorite Saved", savedFavorite);
+        }
+        else if(statusCode == 403){
+            // 토큰 만료를 알림
+            return new ResponseModel<>(HttpStatus.FORBIDDEN.value(), "Token Expired", null);
+        }
+        else{
+            // 로그인하지 않은 사용자
+            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized", null);
+        }
     }
 
     @PostMapping("/remove")
-    public ResponseModel<Favorite> removeFavorite(@RequestBody Favorite favorite){
-        final Favorite removedFavorite = favoriteService.removeFavorite(favorite);
-        favoriteService.updateBookInfo_MANUAL(removedFavorite.getBook());
-        return new ResponseModel<>(HttpStatus.OK.value(), "Favorite Removed", removedFavorite);
+    public ResponseModel<Favorite> removeFavorite(@RequestBody Favorite favorite, @RequestHeader(name = "Authorization") String authHeader){
+        int statusCode = userService.isValidUser(favorite.getUser().getUserEmail(), authHeader).getStatusCode();
+        if (statusCode == 200) {
+            final Favorite removedFavorite = favoriteService.removeFavorite(favorite);
+            favoriteService.updateBookInfo_MANUAL(removedFavorite.getBook());
+            return new ResponseModel<>(HttpStatus.OK.value(), "Favorite Removed", removedFavorite);
+        }
+        else if(statusCode == 403){
+            // 토큰 만료를 알림
+            return new ResponseModel<>(HttpStatus.FORBIDDEN.value(), "Token Expired", null);
+        }
+        else{
+            // 로그인하지 않은 사용자
+            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized", null);
+        }
     }
 
     @GetMapping("/{userEmail}")
@@ -69,7 +91,6 @@ public class FavoriteController {
         }
         else if(statusCode == 403){
             // 토큰 만료를 알림
-            List<Favorite> emptyList = new ArrayList<>();
             return new ResponseModel<>(HttpStatus.FORBIDDEN.value(), "Token Expired", null);
         }
         else{
