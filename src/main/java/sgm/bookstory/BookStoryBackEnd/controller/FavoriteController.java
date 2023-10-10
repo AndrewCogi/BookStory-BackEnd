@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sgm.bookstory.BookStoryBackEnd.entities.Favorite;
+import sgm.bookstory.BookStoryBackEnd.models.BookStoryApiException;
 import sgm.bookstory.BookStoryBackEnd.models.ResponseModel;
-import sgm.bookstory.BookStoryBackEnd.models.ResponseModelException;
 import sgm.bookstory.BookStoryBackEnd.services.FavoriteService;
 import sgm.bookstory.BookStoryBackEnd.services.UserService;
 
@@ -30,11 +30,13 @@ public class FavoriteController {
         }
         else if(statusCode == 403){
             // 토큰 만료를 알림
-            return new ResponseModel<>(HttpStatus.FORBIDDEN.value(), "Token Expired", null);
+            throw new BookStoryApiException(HttpStatus.FORBIDDEN,"Token Expired");
+//            return new ResponseModel<>(HttpStatus.FORBIDDEN.value(), "Token Expired", null);
         }
         else{
             // 로그인하지 않은 사용자
-            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized", null);
+            throw new BookStoryApiException(HttpStatus.UNAUTHORIZED,"UnAuthorized");
+//            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized", null);
         }
     }
 
@@ -48,12 +50,13 @@ public class FavoriteController {
         }
         else if(statusCode == 403){
             // 토큰 만료를 알림
-            return new ResponseModelException<>(HttpStatus.FORBIDDEN, "Token Expired");
+            throw new BookStoryApiException(HttpStatus.FORBIDDEN,"Token Expired");
 //            return new ResponseModel<>(HttpStatus.FORBIDDEN.value(), "Token Expired", null);
         }
         else{
             // 로그인하지 않은 사용자
-            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized", null);
+            throw new BookStoryApiException(HttpStatus.UNAUTHORIZED,"UnAuthorized");
+//            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized", null);
         }
     }
 
