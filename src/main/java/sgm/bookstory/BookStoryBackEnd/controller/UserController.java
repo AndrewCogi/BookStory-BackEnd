@@ -2,6 +2,7 @@ package sgm.bookstory.BookStoryBackEnd.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sgm.bookstory.BookStoryBackEnd.entities.Favorite;
 import sgm.bookstory.BookStoryBackEnd.entities.User;
@@ -32,20 +33,21 @@ public class UserController {
         return new ResponseModel<>(HttpStatus.OK.value(), "User Added", savedUser);
     }
     @PostMapping("/remove")
-    public ResponseModel<User> removeUser(@RequestBody User user, @RequestHeader("Authorization") String authHeader){
-        int statusCode = userService.isValidUser(user.getUserEmail(), authHeader).getStatusCode();
-        if(statusCode == 200){
-            final User removedUser = userService.removeUser(user);
-            return new ResponseModel<>(HttpStatus.OK.value(), "User Removed", removedUser);
-        }
-        else if(statusCode == 403){
-            // 토큰 만료를 알림
-            List<Favorite> emptyList = new ArrayList<>();
-            return new ResponseModel<>(HttpStatus.FORBIDDEN.value(), "Token Expired", null);
+    public ResponseModel<User> removeUser(@RequestBody User user){
+        final User removedUser = userService.removeUser(user);
+        return new ResponseModel<>(HttpStatus.OK.value(), "User Removed", removedUser);
+    }
+
+    @GetMapping("/tokenValid")
+    public ResponseEntity<Boolean> getIsTokenValid(
+            @RequestParam(name = "userEmail") String userEmail,
+            @RequestHeader(name = "authorization") String authHeader){
+        int statusCode = userService.isValidUser(userEmail, authHeader).getStatusCode();
+        if(statusCode == 200){ // 살아있는 유저. true 반환.
+            return ResponseEntity.ok(true);
         }
         else{
-            // 로그인하지 않은 사용자
-            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized", null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
         }
     }
 }
