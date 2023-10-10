@@ -22,28 +22,28 @@ public class GlobalExceptionHandler {
         errorDetails.setTimestamp(System.currentTimeMillis());
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorDetails> handleAccessDeniedApiException(
-            AccessDeniedException exception,
-            WebRequest request
-    ) {
-        final ErrorDetails errorDetails = new ErrorDetails();
-        errorDetails.setErrorMessage(exception.getLocalizedMessage());
-        errorDetails.setDevErrorMessage(request.getDescription(false));
-        errorDetails.setTimestamp(System.currentTimeMillis());
-        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorDetails> handleGlobalException(
-            Exception exception,
-            WebRequest request
-    ) {
-        final ErrorDetails errorDetails = new ErrorDetails();
-        errorDetails.setErrorMessage(exception.getLocalizedMessage());
-        errorDetails.setDevErrorMessage(request.getDescription(false));
-        errorDetails.setTimestamp(System.currentTimeMillis());
-        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
-    }
+//
+//    @ExceptionHandler(AccessDeniedException.class)
+//    public ResponseEntity<ErrorDetails> handleAccessDeniedApiException(
+//            AccessDeniedException exception,
+//            WebRequest request
+//    ) {
+//        final ErrorDetails errorDetails = new ErrorDetails();
+//        errorDetails.setErrorMessage(exception.getLocalizedMessage());
+//        errorDetails.setDevErrorMessage(request.getDescription(false));
+//        errorDetails.setTimestamp(System.currentTimeMillis());
+//        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+//    }
+//
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ErrorDetails> handleGlobalException(
+//            Exception exception,
+//            WebRequest request
+//    ) {
+//        final ErrorDetails errorDetails = new ErrorDetails();
+//        errorDetails.setErrorMessage(exception.getLocalizedMessage());
+//        errorDetails.setDevErrorMessage(request.getDescription(false));
+//        errorDetails.setTimestamp(System.currentTimeMillis());
+//        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+//    }
 }

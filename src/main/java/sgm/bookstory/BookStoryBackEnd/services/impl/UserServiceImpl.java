@@ -112,18 +112,21 @@ public class UserServiceImpl implements UserService {
                 }
                 // 토큰이 만료됨
                 else {
-                    return new ResponseModel<>(HttpStatus.FORBIDDEN.value(), "Token Expired", false);
+                    throw new BookStoryApiException(HttpStatus.FORBIDDEN, "Token Expired");
+//                    return new ResponseModel<>(HttpStatus.FORBIDDEN.value(), "Token Expired", false);
                 }
             }
             // 사용자가 일치하지 않음
             else {
                 System.out.println("[isValidUser Result] : User Mismatch! (UserEmail: "+userEmail+", TokenEmail: "+extractEmailFromAttributes(getUserResult.getUserAttributes())+")");
-                return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "User Mismatch", false);
+                throw new BookStoryApiException(HttpStatus.UNAUTHORIZED, "User Mismatch");
+//                return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "User Mismatch", false);
             }
         } catch (NotAuthorizedException e) {
             // 토큰이 유효하지 않을 때의 처리
             System.out.println("[isValidUser Result] : User UnAuthorized!");
-            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "User UnAuthorized", false);
+            throw new BookStoryApiException(HttpStatus.UNAUTHORIZED, "User UnAuthorized");
+//            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "User UnAuthorized", false);
         }
     }
 
