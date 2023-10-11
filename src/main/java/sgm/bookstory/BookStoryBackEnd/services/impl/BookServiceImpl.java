@@ -74,6 +74,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getBookByTitleContaining(String title) {
+        System.out.println(bookRepository.findByTitleContaining(title));
         return bookRepository.findByTitleContaining(title).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not found!"));
     }
 

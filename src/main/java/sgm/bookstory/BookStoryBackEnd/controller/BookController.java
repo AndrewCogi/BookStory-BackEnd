@@ -2,7 +2,6 @@ package sgm.bookstory.BookStoryBackEnd.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sgm.bookstory.BookStoryBackEnd.entities.Book;
@@ -56,18 +55,19 @@ public class BookController {
 
     @GetMapping("getBooksByCategoryAge/{categoryAge}")
     // 해당 카테고리(age)에 포함된 책 최대 n(limit)권 반환 (playCount 높은 순)
-    public ResponseEntity<List<Book>> getBooksByCategoryAgeOrderByPlayCountDesc(
+    public ResponseModel<List<Book>> getBooksByCategoryAgeOrderByPlayCountDesc(
             @PathVariable(name = "categoryAge") CategoryType categoryType,
             @RequestParam(name = "limit") String limit) {
-        return ResponseEntity.ok(bookService.getBooksByCategoryAgeOrderByPlayCountDesc(categoryType,Integer.parseInt(limit)));
+        final List<Book> searchResults = bookService.getBooksByCategoryAgeOrderByPlayCountDesc(categoryType,Integer.parseInt(limit));
+        return new ResponseModel<>(HttpStatus.OK.value(), "Books By CategoryAge", searchResults);
     }
 
     @GetMapping("getBooksByCategoryType/{categoryType}")
     // 해당 카테고리(not age)에 포함된 책 최대 n(limit)권 반환 (playCount 높은 순)
-    public ResponseEntity<List<Book>> getBooksByCategoryTypeOrderByPlayCountDesc(
+    public ResponseModel<List<Book>> getBooksByCategoryTypeOrderByPlayCountDesc(
             @PathVariable(name = "categoryType") List<CategoryType> categoryTypes,
             @RequestParam(name = "limit") String limit) {
-        System.out.println("testing"+categoryTypes);
-        return ResponseEntity.ok(bookService.getBooksByCategoryTypeOrderByPlayCountDesc(categoryTypes,Integer.parseInt(limit)));
+        final List<Book> searchResults = bookService.getBooksByCategoryTypeOrderByPlayCountDesc(categoryTypes,Integer.parseInt(limit));
+        return new ResponseModel<>(HttpStatus.OK.value(), "Books By CategoryTypes", searchResults);
     }
 }
