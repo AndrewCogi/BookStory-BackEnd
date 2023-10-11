@@ -36,8 +36,6 @@ public class BookServiceImpl implements BookService {
                     HttpStatus.BAD_REQUEST,
                     "Book ID("+book.getBookId()+") already exists! - Book Title: "+bookRepository.getReferenceById(book.getBookId()).getTitle()
             );
-        // 부가정보 추가
-        book.setPlayCount(0L);
         // 책 추가 후 추가한 책 정보 반환
         return bookRepository.save(book);
     }
@@ -52,8 +50,6 @@ public class BookServiceImpl implements BookService {
                         HttpStatus.BAD_REQUEST,
                         "Book ID("+book.getBookId()+") already exists! - Book Title: "+bookRepository.getReferenceById(book.getBookId()).getTitle()
                 );
-            // 부가정보 추가
-            book.setPlayCount(0L);
             // 책 추가
             savedBooks.add(book);
         }
@@ -61,13 +57,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book removeBook(Book book){
-        // 지울 책 정보 찾기
-        Book removedBook = bookRepository.findById(book.getBookId()).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not exists!"));
+    public Long removeBook(Book book){
+        // 지울 책 정보 있나 확인
+        bookRepository.findById(book.getBookId()).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not exists!"));
+
         // 책 삭제
         bookRepository.deleteById(book.getBookId());
-        // 지워진 책 정보 반환
-        return removedBook;
+        // 지워진 책 id 반환
+        return book.getBookId();
     }
 
     @Override

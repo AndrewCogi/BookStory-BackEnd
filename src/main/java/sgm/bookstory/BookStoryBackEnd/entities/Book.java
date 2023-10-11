@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.transaction.annotation.Transactional;
 import sgm.bookstory.BookStoryBackEnd.enums.CategoryType;
 
 import java.sql.Timestamp;
@@ -13,6 +14,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name="book")
 public class Book {
@@ -45,17 +47,18 @@ public class Book {
     private String writerDescriptionPath;
     @Column(nullable = false)
     private String publisherDescriptionPath;
-    @Column(nullable = false)
-    @CreationTimestamp
-    private Timestamp creationTime;
     // ----------------------------------
 
     // 자동으로 추가되는 정보들 -------------
-    // BookServiceImpl 에서 추가됨
-    @Column(nullable = false)
-    private Long playCount;
-    @Column(nullable = false)
-    private Long favoriteCount;
+    @Column
+    @CreationTimestamp
+    private Timestamp creationTime;
+    @Column
+    @Builder.Default()
+    private Long playCount = 0L;
+    @Column
+    @Builder.Default()
+    private Long favoriteCount = 0L;
     // ----------------------------------
 
     // 테이블 간 연관관계 설정 --------------

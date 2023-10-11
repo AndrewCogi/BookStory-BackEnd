@@ -35,21 +35,23 @@ public class BookController {
 
     @PostMapping("/remove")
     // 책 제거하기
-    public ResponseModel<Book> removeBook(@RequestBody Book book){
-        final Book removedBook = bookService.removeBook(book);
-        return new ResponseModel<>(HttpStatus.OK.value(), "Book Removed", removedBook);
+    public ResponseModel<Long> removeBook(@RequestBody Book book){
+        final Long removedBookId = bookService.removeBook(book);
+        return new ResponseModel<>(HttpStatus.OK.value(), "Book Removed", removedBookId);
     }
 
     @GetMapping("/all")
     // 모든 책 받기
-    public ResponseEntity<List<Book>> getAllBook(){
-        return ResponseEntity.ok(bookService.getAllBook());
+    public ResponseModel<List<Book>> getAllBook(){
+        final List<Book> allBooks = bookService.getAllBook();
+        return new ResponseModel<>(HttpStatus.OK.value(), "All Books", allBooks);
     }
 
     @GetMapping("/{title}")
     // 특정 제목의 책 받기 (검색)
-    public ResponseEntity<List<Book>> getBookByTitleContaining(@PathVariable(name="title") String title){
-        return ResponseEntity.ok(bookService.getBookByTitleContaining(title));
+    public ResponseModel<List<Book>> getBookByTitleContaining(@PathVariable(name="title") String title){
+        final List<Book> searchResults = bookService.getBookByTitleContaining(title);
+        return new ResponseModel<>(HttpStatus.OK.value(), "Search Result", searchResults);
     }
 
     @GetMapping("getBooksByCategoryAge/{categoryAge}")
