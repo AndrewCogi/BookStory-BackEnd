@@ -39,15 +39,15 @@ public class UserController {
     }
 
     @GetMapping("/tokenValid")
-    public ResponseEntity<Boolean> getIsTokenValid(
+    public ResponseModel<Boolean> getIsTokenValid(
             @RequestParam(name = "userEmail") String userEmail,
             @RequestHeader(name = "authorization") String authHeader){
         int statusCode = userService.isValidUser(userEmail, authHeader).getStatusCode();
-        if(statusCode == 200){ // 살아있는 유저. true 반환.
-            return ResponseEntity.ok(true);
+        if(statusCode == 200){ // 유효한 유저. true 반환.
+            return new ResponseModel<>(HttpStatus.OK.value(), "Valid Token", true);
         }
         else{
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+            return new ResponseModel<>(HttpStatus.UNAUTHORIZED.value(), "Invalid Token", false);
         }
     }
 }
