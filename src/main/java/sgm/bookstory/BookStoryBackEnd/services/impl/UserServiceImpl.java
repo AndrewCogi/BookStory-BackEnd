@@ -104,18 +104,18 @@ public class UserServiceImpl implements UserService {
                 Date userDate = new Date(getLastStatusUpdateTime(userEmail).getTime());
                 System.out.println("currentDate: "+currentDate);
                 System.out.println("userDate: "+userDate);
-//                long diffInHours = TimeUnit.MILLISECONDS.toHours(currentDate.getTime()-userDate.getTime());
-//                System.out.println("diffInHours: "+diffInHours);
-//                if(diffInHours < 1*24){
-//                   System.out.println("[userEmail compare Result] : Success! (UserEmail: "+userEmail+")");
-//                   return new ResponseModel<>(HttpStatus.OK.value(), "Success", true);
-//                }
-                long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(currentDate.getTime()-userDate.getTime());
-                System.out.println("diffInMinutes: "+diffInMinutes);
-                if(diffInMinutes < 1){
-                    System.out.println("[userEmail compare Result] : Success! (UserEmail: "+userEmail+")");
-                    return new ResponseModel<>(HttpStatus.OK.value(), "Success", true);
+                long diffInHours = TimeUnit.MILLISECONDS.toHours(currentDate.getTime()-userDate.getTime());
+                System.out.println("diffInHours: "+diffInHours);
+                if(diffInHours < 1*1){
+                   System.out.println("[userEmail compare Result] : Success! (UserEmail: "+userEmail+")");
+                   return new ResponseModel<>(HttpStatus.OK.value(), "Success", true);
                 }
+//                long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(currentDate.getTime()-userDate.getTime());
+//                System.out.println("diffInMinutes: "+diffInMinutes);
+//                if(diffInMinutes < 1){
+//                    System.out.println("[userEmail compare Result] : Success! (UserEmail: "+userEmail+")");
+//                    return new ResponseModel<>(HttpStatus.OK.value(), "Success", true);
+//                }
                 // 토큰이 만료됨
                 else {
                     throw new BookStoryApiException(HttpStatus.FORBIDDEN, "Token Expired");
