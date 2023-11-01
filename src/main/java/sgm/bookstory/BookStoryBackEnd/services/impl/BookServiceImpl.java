@@ -87,7 +87,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getBooksByCategoryTypeOrderByPlayCountDesc(List<CategoryType> categoryTypes, int limit) {
         Pageable pageable = PageRequest.of(0, limit); // n(limit)개 항목
-        return bookRepository.findByCategoryTypeIn(categoryTypes, pageable).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not found!"));
+        return bookRepository.findBooksByCategoryTypeInOrderByPlayCountDesc(categoryTypes, pageable).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Book not found!"));
     }
 
     @Transactional
