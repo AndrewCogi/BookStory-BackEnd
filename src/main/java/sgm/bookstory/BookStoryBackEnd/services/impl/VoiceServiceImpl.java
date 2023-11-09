@@ -5,10 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import sgm.bookstory.BookStoryBackEnd.entities.Favorite;
 import sgm.bookstory.BookStoryBackEnd.entities.Voice;
+import sgm.bookstory.BookStoryBackEnd.enums.UserStatus;
+import sgm.bookstory.BookStoryBackEnd.enums.VoiceStatus;
 import sgm.bookstory.BookStoryBackEnd.models.BookStoryApiException;
 import sgm.bookstory.BookStoryBackEnd.repos.VoiceRepository;
 import sgm.bookstory.BookStoryBackEnd.services.VoiceService;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,8 +27,8 @@ public class VoiceServiceImpl implements VoiceService {
             throw new BookStoryApiException(
                     HttpStatus.BAD_REQUEST,
                     "Voice Name("+voice.getVoiceName()+") already exists!");
-        // position (voice가 저장되는 위치) 존재 확인 (-1이면 추가안된거)
-        if(voice.getPosition() == -1) throw new BookStoryApiException(HttpStatus.BAD_REQUEST, "Voice position required");
+        // 목소리의 상태 기본값 설정
+        voice.setStatus(VoiceStatus.init);
         // 목소리 추가한 후 추가한 목소리 정보 반환
         return voiceRepository.save(voice);
     }
