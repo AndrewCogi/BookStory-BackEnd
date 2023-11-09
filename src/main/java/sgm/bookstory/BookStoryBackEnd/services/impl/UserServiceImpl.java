@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
                 System.out.println("userDate: "+userDate);
                 long diffInHours = TimeUnit.MILLISECONDS.toHours(currentDate.getTime()-userDate.getTime());
                 System.out.println("diffInHours: "+diffInHours);
-                if(diffInHours < 1*1){
+                if(diffInHours < 1*24){
                    System.out.println("[userEmail compare Result] : Success! (UserEmail: "+userEmail+")");
                    return new ResponseModel<>(HttpStatus.OK.value(), "Success", true);
                 }
