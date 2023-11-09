@@ -23,6 +23,8 @@ public class VoiceServiceImpl implements VoiceService {
             throw new BookStoryApiException(
                     HttpStatus.BAD_REQUEST,
                     "Voice Name("+voice.getVoiceName()+") already exists!");
+        // position (voice가 저장되는 위치) 존재 확인 (-1이면 추가안된거)
+        if(voice.getPosition() == -1) throw new BookStoryApiException(HttpStatus.BAD_REQUEST, "Voice position required");
         // 목소리 추가한 후 추가한 목소리 정보 반환
         return voiceRepository.save(voice);
     }
