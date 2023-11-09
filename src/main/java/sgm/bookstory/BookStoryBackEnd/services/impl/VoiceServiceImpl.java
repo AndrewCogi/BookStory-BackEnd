@@ -42,6 +42,15 @@ public class VoiceServiceImpl implements VoiceService {
         return removedVoice;
     }
     @Override
+    public Voice updateVoiceStatus(Voice voice){
+        // 업데이트할 voice 정보 찾기
+        Voice findVoice = voiceRepository.findByVoiceName(voice.getVoiceName()).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Voice not exists!"));
+        // voice 업데이트
+        findVoice.setStatus(voice.getStatus());
+        // 업데이트한 목소리 정보 반환
+        return voiceRepository.save(findVoice);
+    }
+    @Override
     public List<Voice> getAllVoiceByUser_UserEmail(String userEmail){
         return voiceRepository.findAllByUser_UserEmail(userEmail).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Voice not found!"));
     }

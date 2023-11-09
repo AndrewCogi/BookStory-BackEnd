@@ -24,6 +24,11 @@ public class VoiceController {
         final Voice savedVoice = voiceService.removeVoice(voice);
         return new ResponseModel<>(HttpStatus.OK.value(), "Voice Removed", savedVoice);
     }
+    @PostMapping("/update")
+    public ResponseModel<Voice> updateVoiceStatus(@RequestBody Voice voice){
+        final Voice updatedVoice = voiceService.updateVoiceStatus(voice);
+        return new ResponseModel<>(HttpStatus.OK.value(), "Voice Updated", updatedVoice);
+    }
     @GetMapping("/{userEmail}")
     public ResponseModel<List<Voice>> getAllVoiceByUser_UserEmail(
         @PathVariable(name = "userEmail") String userEmail) {

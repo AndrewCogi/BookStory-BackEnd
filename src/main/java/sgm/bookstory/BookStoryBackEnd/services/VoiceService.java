@@ -11,4 +11,5 @@ public interface VoiceService {
     Voice addVoice(Voice voice);
     Voice removeVoice(Voice voice);
     List<Voice> getAllVoiceByUser_UserEmail(String userEmail);
+    Voice updateVoiceStatus(Voice voice);
 }
