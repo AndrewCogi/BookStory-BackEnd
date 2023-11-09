@@ -2,14 +2,11 @@ package sgm.bookstory.BookStoryBackEnd.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sgm.bookstory.BookStoryBackEnd.entities.Favorite;
 import sgm.bookstory.BookStoryBackEnd.entities.Voice;
 import sgm.bookstory.BookStoryBackEnd.models.ResponseModel;
 import sgm.bookstory.BookStoryBackEnd.services.VoiceService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,9 +25,10 @@ public class VoiceController {
         return new ResponseModel<>(HttpStatus.OK.value(), "Voice Removed", savedVoice);
     }
     @GetMapping("/{userEmail}")
-    public ResponseEntity<List<Voice>> getAllVoiceByUser_UserEmail(
+    public ResponseModel<List<Voice>> getAllVoiceByUser_UserEmail(
         @PathVariable(name = "userEmail") String userEmail) {
+        final List<Voice> savedVoices = voiceService.getAllVoiceByUser_UserEmail(userEmail);
         // userEmail에 대한 모든 favorite 값 반환
-        return ResponseEntity.ok(voiceService.getAllVoiceByUser_UserEmail(userEmail));
+        return new ResponseModel<>(HttpStatus.OK.value(), "Voice list by email", savedVoices);
     }
 }
