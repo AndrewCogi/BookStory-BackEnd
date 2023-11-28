@@ -67,5 +67,8 @@ public class Book {
     @JsonIgnore
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<Favorite> favorites;
+    @JsonIgnore
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<VoiceInference> voiceInferences;
     // ----------------------------------
 }

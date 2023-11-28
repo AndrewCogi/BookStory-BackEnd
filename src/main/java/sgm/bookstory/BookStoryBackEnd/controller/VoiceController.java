@@ -21,8 +21,8 @@ public class VoiceController {
     }
     @PostMapping("/remove")
     public ResponseModel<Voice> removeVoice(@RequestBody Voice voice){
-        final Voice savedVoice = voiceService.removeVoice(voice);
-        return new ResponseModel<>(HttpStatus.OK.value(), "Voice Removed", savedVoice);
+        final Voice removedVoice = voiceService.removeVoice(voice);
+        return new ResponseModel<>(HttpStatus.OK.value(), "Voice Removed", removedVoice);
     }
     @PostMapping("/update")
     public ResponseModel<Voice> updateVoiceStatus(@RequestBody Voice voice){

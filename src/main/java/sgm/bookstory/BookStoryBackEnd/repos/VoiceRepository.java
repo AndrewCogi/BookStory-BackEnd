@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface VoiceRepository extends JpaRepository<Voice, UUID> {
+public interface VoiceRepository extends JpaRepository<Voice, String> {
     boolean existsByVoiceName(String voiceName);
     Optional<Voice> findByVoiceName(String voiceName);
     Optional<List<Voice>> findAllByUser_UserEmail(String userEmail);

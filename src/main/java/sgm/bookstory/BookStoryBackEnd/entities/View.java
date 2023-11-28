@@ -17,16 +17,21 @@ import java.util.UUID;
 @Entity
 @Table(name = "view")
 public class View {
+    // 자동으로 추가되는 정보들 -------------
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID viewId; // record를 만들 때 자동 생성됨
+    private UUID viewId;
     @Column
     @CreationTimestamp
-    private Timestamp showTime; // record를 만들 때 자동 생성됨
+    private Timestamp showTime;
+    // ----------------------------------
+
+    // 뷰 추가할 때 넣어야 하는 정보 ---------
     @ManyToOne
     @JoinColumn(name = "user_email")
     private User user; // userEmail 값은 필수
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book; // bookId 값은 필수
+    // ----------------------------------
 }

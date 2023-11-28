@@ -22,7 +22,7 @@ public class VoiceServiceImpl implements VoiceService {
     @Override
     public Voice addVoice(Voice voice) {
         // 목소리 이름 중복 확인
-        System.out.println("voiceID: "+voice.getVoiceName());
+        System.out.println("voiceName: "+voice.getVoiceName());
         if(voiceRepository.existsByVoiceName(voice.getVoiceName()))
             throw new BookStoryApiException(
                     HttpStatus.BAD_REQUEST,
@@ -37,7 +37,7 @@ public class VoiceServiceImpl implements VoiceService {
         // 지울 voice 정보 찾기
         Voice removedVoice = voiceRepository.findByVoiceName(voice.getVoiceName()).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Voice not exists!"));
         // voice 삭제
-        voiceRepository.deleteById(removedVoice.getVoiceId());
+        voiceRepository.deleteById(removedVoice.getVoiceName());
         // 지워진 favorite 정보 반환
         return removedVoice;
     }
