@@ -11,6 +11,5 @@ import java.util.UUID;
 public interface VoiceInferenceRepository extends JpaRepository<VoiceInference, UUID> {
     boolean existsByVoice_VoiceNameAndUser_UserEmailAndBook_BookId(String voiceName, String userEmail, Long bookId);
     Optional<VoiceInference> findByVoice_VoiceNameAndUser_UserEmailAndBook_BookId(String voiceName, String userEmail, Long bookId);
-//    Optional<Voice> findByVoiceName(String voiceName);
-//    Optional<List<Voice>> findAllByUser_UserEmail(String userEmail);
+    List<VoiceInference> findAllByUser_UserEmailAndBook_BookId(String userEmail, Long bookId);
 }

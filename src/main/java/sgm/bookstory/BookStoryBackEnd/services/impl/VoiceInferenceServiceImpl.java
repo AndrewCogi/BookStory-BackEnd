@@ -56,6 +56,6 @@ public class VoiceInferenceServiceImpl implements VoiceInferenceService {
 
     @Override
     public List<VoiceInference> getAllVoiceInferenceByUser_UserEmailAndBook_BookId(String userEmail, Long bookId) {
-        return null;
+        return voiceInferenceRepository.findAllByUser_UserEmailAndBook_BookId(userEmail, bookId);
     }
 }

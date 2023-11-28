@@ -26,7 +26,7 @@ public class VoiceInferenceController {
         final VoiceInference removedVoiceInference = voiceInferenceService.removeVoiceInference(voiceInference);
         return new ResponseModel<>(HttpStatus.OK.value(), "Voice Inference Removed", removedVoiceInference);
     }
-    @GetMapping("/{voiceName}")
+    @GetMapping("/{userEmail}")
     public ResponseModel<List<VoiceInference>> getAllVoiceInferenceByUser_UserEmailAndBook_BookId(
         @PathVariable(name = "userEmail") String userEmail,
         @RequestParam(name = "bookId") String bookId) {
