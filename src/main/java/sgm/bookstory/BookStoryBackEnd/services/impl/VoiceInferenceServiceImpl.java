@@ -36,7 +36,7 @@ public class VoiceInferenceServiceImpl implements VoiceInferenceService {
                     "already exists!");
         }
         // 목소리 추론 상태 기본값 설정
-        voiceInference.setVoiceInferenceStatus(VoiceInferenceStatus.processing);
+        voiceInference.setVoiceInferenceStatus(VoiceInferenceStatus.init);
         // 목소리 추가한 후 추가한 목소리 정보 반환
         return voiceInferenceRepository.save(voiceInference);
     }
