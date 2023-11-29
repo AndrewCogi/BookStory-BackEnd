@@ -29,9 +29,9 @@ public class VoiceController {
         final Voice updatedVoice = voiceService.updateVoiceStatus(voice);
         return new ResponseModel<>(HttpStatus.OK.value(), "Voice Updated", updatedVoice);
     }
-    @GetMapping("/{userEmail}")
+    @GetMapping("/")
     public ResponseModel<List<Voice>> getAllVoiceByUser_UserEmail(
-        @PathVariable(name = "userEmail") String userEmail) {
+        @RequestParam(name = "userEmail", defaultValue = "") String userEmail) {
         final List<Voice> savedVoices = voiceService.getAllVoiceByUser_UserEmail(userEmail);
         // userEmail에 대한 모든 favorite 값 반환
         return new ResponseModel<>(HttpStatus.OK.value(), "Voice list by email", savedVoices);
