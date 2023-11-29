@@ -9,4 +9,5 @@ public interface VoiceInferenceService {
     VoiceInference addVoiceInference(VoiceInference voiceInference);
     VoiceInference removeVoiceInference(VoiceInference voiceInference);
     List<VoiceInference> getAllVoiceInferenceByUser_UserEmailAndBook_BookId(String userEmail, Long bookId);
+    VoiceInference updateVoiceInferenceStatus(VoiceInference voiceInference);
 }

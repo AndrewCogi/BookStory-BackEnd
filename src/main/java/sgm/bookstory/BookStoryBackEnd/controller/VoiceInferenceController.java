@@ -26,6 +26,11 @@ public class VoiceInferenceController {
         final VoiceInference removedVoiceInference = voiceInferenceService.removeVoiceInference(voiceInference);
         return new ResponseModel<>(HttpStatus.OK.value(), "Voice Inference Removed", removedVoiceInference);
     }
+    @PostMapping("/update")
+    public ResponseModel<VoiceInference> updateVoiceInferenceStatus(@RequestBody VoiceInference voiceInference){
+        final VoiceInference updatedVoiceInference = voiceInferenceService.updateVoiceInferenceStatus(voiceInference);
+        return new ResponseModel<>(HttpStatus.OK.value(), "Voice Inference Updated", updatedVoiceInference);
+    }
     @GetMapping("/")
     public ResponseModel<List<VoiceInference>> getAllVoiceInferenceByUser_UserEmailAndBook_BookId(
         @RequestParam(name = "userEmail", defaultValue = "") String userEmail,

@@ -50,12 +50,26 @@ public class VoiceInferenceServiceImpl implements VoiceInferenceService {
         ).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Voice Inference not exists!"));
         // voice 삭제
         voiceInferenceRepository.deleteById(removedVoiceInference.getVoiceInferenceId());
-        // 지워진 favorite 정보 반환
+        // 지워진 voice inference 정보 반환
         return removedVoiceInference;
     }
 
     @Override
     public List<VoiceInference> getAllVoiceInferenceByUser_UserEmailAndBook_BookId(String userEmail, Long bookId) {
         return voiceInferenceRepository.findAllByUser_UserEmailAndBook_BookId(userEmail, bookId);
+    }
+
+    @Override
+    public VoiceInference updateVoiceInferenceStatus(VoiceInference voiceInference) {
+        // 업데이트할 voiceInference 정보 찾기
+        VoiceInference findVoiceInference = voiceInferenceRepository.findByVoice_VoiceNameAndUser_UserEmailAndBook_BookId(
+                voiceInference.getVoice().getVoiceName(),
+                voiceInference.getUser().getUserEmail(),
+                voiceInference.getBook().getBookId()
+        ).orElseThrow(() -> new BookStoryApiException(HttpStatus.BAD_REQUEST, "Voice Inference not exists!"));
+        // voice 업데이트
+        findVoiceInference.setVoiceInferenceStatus(voiceInference.getVoiceInferenceStatus());
+        // 업데이트된 voice inference 정보 반환
+        return voiceInferenceRepository.save(findVoiceInference);
     }
 }
