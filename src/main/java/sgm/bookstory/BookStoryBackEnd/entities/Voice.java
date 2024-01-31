@@ -28,6 +28,8 @@ public class Voice {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private VoiceStatus status;
+    @Column(nullable = false)
+    private String gender;
     @ManyToOne
     @JoinColumn(name = "user_email")
     private User user; // userEmail 값은 필수
